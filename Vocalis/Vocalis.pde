@@ -21,6 +21,8 @@ int gameState;
 PImage menu;
 //PlayerCharacter
 PImage playerModel;
+//position af spikes
+float deadX = 0;
 
 
 void setup()
@@ -47,7 +49,9 @@ void setup()
 
 void draw(){
   background(255);
+  //en switch case, der indeholder spillens forskellige dele bestående af menu, spillet og en deadscreen
   switch(gameState) {
+    //spilmenuen:
     case 0:
       image(menu,0,0,width,width*9/16);
       //aktiverer, når en knap på musen bliver trykket
@@ -64,6 +68,7 @@ void draw(){
         }
       }
       break;
+    //selve spillet:
     case 1:
       //Opfanger lydniveauet og gemmer det i "vol" variablen
       for(int i = 0; i < in.bufferSize() - 1; i++){
@@ -96,19 +101,62 @@ void draw(){
       //jeg laver en Matrix der sørger for, at alle affine transformations
       //ikke bliver anvendt på andre objekter end dem inden i denne.
       pushMatrix();
+      //spillerens position på venstre side af bjælken:
       translate(x,0);
       image(playerModel,width/14,height-(height/8),width/20,height/8);
       popMatrix();
+      
+      //spikes på venstre side af skærmen
+      fill(0);
+      rect(0,height*0.8,deadX,height*0.2);
+      pushMatrix();
+      translate(deadX,height*0.8);
+      fill(230,0,70);
+      triangle(0,0,width/50,height/50,0,height/25);
+      translate(0,height/25);
+      triangle(0,0,width/50,height/50,0,height/25);
+      translate(0,height/25);
+      triangle(0,0,width/50,height/50,0,height/25);
+      translate(0,height/25);
+      triangle(0,0,width/50,height/50,0,height/25);
+      translate(0,height/25);
+      triangle(0,0,width/50,height/50,0,height/25);
+      translate(0,height/25);
+      popMatrix();
+      
+      //funktion for bevægelse af spikes mod højre
+      for(int i = 0; i < 5; i++){
+        deadX += width*i/pow(10,5);
+      }
+      
+      //funktion for død af spilleren ved kontakt med spikes
+      if(deadX+width/50 >= x){
+        gameState = 3;
+      }
+      
       //viser værdier til debugging
       pushMatrix();
       translate(width-200,100);
       scale(5);
       fill(255,0,0);
       text(avg,0,0);
-      text(avgVol,0,75);
+      text(avgVol,0,35);
+      text(deadX,0,70);
       popMatrix();
       break;
+      
+      //viser en deadscreen, når spilleren dør:
+      case 2:
+      //et for-loop, der bliver brugt til at time tiden, denne deadscreen skal vises:
+      for(int i = 0; i < 300; i++){
+        if (i >= 299){
+          gameState = 0;
+        }
+      }
+      
+      break;
   }
+ 
 }
 //Stopper Minim audio
 void stop()
