@@ -2,16 +2,23 @@ import ddf.minim.*;
 
 Minim minim;
 AudioInput in;
-//værdier for 
+//værdier for amplitude
 float val;
 float valMax;
-//max value adjustment
+//maksimal lydstyrke justering
 float max = 0.3;
 //variabler for gennemsnitsværdi af amplitude
 int increment;
 float[] array;
-
-
+//x-værdi af bjælken
+float x = map(val,0,max,0,width);
+//Spilstatus (startmenu eller spil)
+//kilde: https://forum.processing.org/one/topic/game-menu.html
+int gameState;
+//baggrundsbillede til startsmenu
+PImage menu;
+//PlayerCharacter
+PImage playerModel;
 void setup()
 {
   //size(2000, 700, P2D);
@@ -26,6 +33,7 @@ void setup()
   //kilde: http://code.compartmental.net/tools/minim/quickstart/
   in = minim.getLineIn(Minim.STEREO, 512);
   background(0);
+  gameState = 0;
 }
 
 //knapper på startskærmen
@@ -36,9 +44,10 @@ void doStateWelcomeScreenDisplay(){
     if (mouseY >= height*0.85 && mouseY <= height*0.7){
       //determinerer, om musen er inden for x-området af én af knapperne
       if (mouseX >= width/5 && mouseX <= width/4){
-        
+        gameState = 1;
       }
       if (mouseX >= width*0.75 && mouseX <= width*0.85){
+        exit();
       }
     }
   }
@@ -47,39 +56,45 @@ void doStateWelcomeScreenDisplay(){
 
 void draw(){
   background(255);
-  // draw the waveforms
-  for(int i = 0; i < in.bufferSize() - 1; i++){
+  switch(gameState) {
+    case 0:
+      
+      break;
+    case 1:
+      // draw the waveforms
+      for(int i = 0; i < in.bufferSize() - 1; i++){
+        
+      
+        val = in.mix.get(i);
+      
+      }  
+      if (increment >= 30){ increment = 0; }
+        array[increment] = val;
+        increment++;
     
-    
-    val = in.mix.get(i);
-    
-  }  
-  if (increment >= 30){ increment = 0; }
-    array[increment] = val;
-    increment++;
-
-  float avg = 0;
-  for (int i = 0; i<30; i++){
-    avg += array[i];
+      float avg = 0;
+      for (int i = 0; i<30; i++){
+        avg += array[i];
+      }
+      avg = avg/30;
+      if(avg > val){
+        val += (avg-val/5);
+      } if (avg < val){ 
+        val -= (val-avg/5);
+      }
+      fill(125);
+      rect(0,0,x,height);
+      pushMatrix();
+      translate(width-150,50);
+      scale(3);
+      fill(0);
+      text(mouseX,0,0);
+      translate(0, 50);
+      text(mouseY,0,0);
+      popMatrix();
+      break;
   }
-  avg = avg/30;
-  if(avg > val){
-    val += (avg-val/5);
-  } if (avg < val){
-    val -= (val-avg/5);
-  }
-  fill(125);
-  rect(0,0,map(val,0,max,0,width),height);
-  pushMatrix();
-  translate(width-150,50);
-  scale(3);
-  fill(0);
-  text(mouseX,0,0);
-  translate(0, -50);
-  text(mouseY,0,0);
-  popMatrix();
 }
-
 
 void stop()
 {
