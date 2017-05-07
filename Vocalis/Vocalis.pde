@@ -14,7 +14,8 @@ float[] array;
 
 void setup()
 {
-  size(2000, 700, P2D);
+  //size(2000, 700, P2D);
+  fullScreen();
   minim = new Minim(this);
   minim.debugOn();
   
