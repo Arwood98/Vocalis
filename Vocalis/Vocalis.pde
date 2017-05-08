@@ -24,6 +24,8 @@ int gameState;
 PImage menu;
 //PlayerCharacter
 PImage playerModel;
+//Dead Screen
+PImage deadScreen;
 //position af spikes
 float deadX = 0;
 
@@ -47,6 +49,7 @@ void setup()
   //Initialisere billeder til baggrund og spiller
   menu = loadImage("startScreen.png");
   playerModel = loadImage("playerModel.png");
+  deadScreen = loadImage("deadScreen.png");
   sliderX = width/2;
 }
 
@@ -146,9 +149,9 @@ void draw(){
      // }
       
       //funktion for død af spilleren ved kontakt med spikes
-      if(deadX >= x-width/30){
+      /*if(deadX >= x-width/10){
         gameState = 2;
-      }
+      }*/
       
       //viser værdier til debugging
       pushMatrix();
@@ -164,17 +167,13 @@ void draw(){
       //viser en deadscreen, når spilleren dør:
       case 2:
       //et for-loop, der bliver brugt til at time tiden, denne deadscreen skal vises:
-      boolean backToMenu = false;
       float deadTime;
-      if(backToMenu == false) deadTime = millis();
-      int deadEnd = 8000;
+      int deadEnd = 6000;
+      deadTime = millis();
       if(deadTime >= deadEnd){
         gameState = 0;
-        backToMenu = true;
       }
-      pushMatrix();
-      fill(0);
-      rect(0,0,width,height);
+      image(deadScreen,0,0,width,height);
       break;
   }
  
