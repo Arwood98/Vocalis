@@ -47,6 +47,7 @@ void setup()
   //Initialisere billeder til baggrund og spiller
   menu = loadImage("startScreen.png");
   playerModel = loadImage("playerModel.png");
+  sliderX = width/2;
 }
 
 
@@ -58,19 +59,11 @@ void draw(){
     //spilmenuen:
     case 0:
       image(menu,0,0,width,height);
-      //slider til justering af sværhedsgrad
-      sliderX = width/2;
       
       rectMode(CENTER);
       fill(125);
       rect(sliderX,height*0.932,width/80,width/40,width/200);
-      
-      fill(0);
-      scale(3);
-      text(mouseX,200,200);
-      text(mouseY,300,200);
-      text(sliderX,400,200);
-      
+
       //aktiverer, når en knap på musen bliver trykket
       if (mousePressed == true){
         //determinerer, om musen er inden for knappernes y-værdier
@@ -83,8 +76,10 @@ void draw(){
             exit();
           }
         }
-        if(mouseX >= sliderX-(width/100) && mouseX <= sliderX+(width/100) && mouseY >= height*0.91 && mouseY <= height*0.95) {
+        if(mouseX >= sliderX-(width/50) && mouseX <= sliderX+(width/50) && mouseY >= height*0.91 && mouseY <= height*0.95) {
           sliderX = mouseX;
+          if(sliderX < width*0.13) sliderX = width*0.13;
+          if(sliderX > width*0.87) sliderX = width*0.87;
         }
       }
       break;
@@ -146,13 +141,13 @@ void draw(){
       popMatrix();
       
       //funktion for bevægelse af spikes mod højre
-      for(int i = 0; i < 5; i++){
-        deadX += width*i/pow(map(diff,width*0.13,width*0.87,9,11),5);
-      }
+      //for(int i = 0; i < 5; i++){
+        deadX += width*1/*i*//pow(map(diff,width*0.13,width*0.87,9,11),5);
+     // }
       
       //funktion for død af spilleren ved kontakt med spikes
-      if(deadX+width/30 >= x){
-        gameState = 3;
+      if(deadX >= x-width/30){
+        gameState = 2;
       }
       
       //viser værdier til debugging
@@ -169,12 +164,17 @@ void draw(){
       //viser en deadscreen, når spilleren dør:
       case 2:
       //et for-loop, der bliver brugt til at time tiden, denne deadscreen skal vises:
-      float deadTime = millis();
+      boolean backToMenu = false;
+      float deadTime;
+      if(backToMenu == false) deadTime = millis();
       int deadEnd = 8000;
       if(deadTime >= deadEnd){
         gameState = 0;
+        backToMenu = true;
       }
-          
+      pushMatrix();
+      fill(0);
+      rect(0,0,width,height);
       break;
   }
  
