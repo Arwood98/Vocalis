@@ -149,9 +149,9 @@ void draw(){
      // }
       
       //funktion for død af spilleren ved kontakt med spikes
-      /*if(deadX >= x-width/10){
+      if(deadX <= x-width/10){
         gameState = 2;
-      }*/
+      }
       
       //viser værdier til debugging
       pushMatrix();
