@@ -2,6 +2,9 @@ import ddf.minim.*;
 
 Minim minim;
 AudioInput in;
+//slider til justering af sværhedsgrad + variabel
+float sliderX;
+float diff;
 //værdier for amplitude
 float vol;
 float avgVol;
@@ -54,10 +57,20 @@ void draw(){
     //spilmenuen:
     case 0:
       image(menu,0,0,width,width*9/16);
+      //slider til justering af sværhedsgrad
+      sliderX = width/2;
+      
+      pushMatrix();
+      translate(sliderX,height*0.932);
+      rectMode(CENTER);
+      fill(125);
+      rect(0,0,width/80,width/40,width/200);
+      popMatrix();
+      
       //aktiverer, når en knap på musen bliver trykket
       if (mousePressed == true){
         //determinerer, om musen er inden for knappernes y-værdier
-        if (mouseY >= (width*9/16)*4/5 && mouseY <= (width*9/16)){
+        if (mouseY >=  (width*9/16)*4/5 && mouseY <= (width*9/16)){
           //determinerer, om musen er inden for x-området af én af knapperne
           if (mouseX >= 0 && mouseX <= width*2/7){
             gameState = 1;
@@ -66,6 +79,7 @@ void draw(){
             exit();
           }
         }
+      //f(mouseX <= sliderX-width/100 && mouseX >= sliderX+width/100 && mouseY) {
       }
       break;
     //selve spillet:
@@ -148,10 +162,8 @@ void draw(){
       //viser en deadscreen, når spilleren dør:
       case 2:
       //et for-loop, der bliver brugt til at time tiden, denne deadscreen skal vises:
-      for(int i = 0; i < 300; i++){
-        if (i >= 299){
+      for(int i = 0; i >= 300; i++){
           gameState = 0;
-        }
       }
       
       break;
