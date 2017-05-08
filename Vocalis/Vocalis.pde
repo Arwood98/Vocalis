@@ -125,10 +125,10 @@ void draw(){
       popMatrix();
       
       //spikes på venstre side af skærmen
+      pushMatrix();
       fill(0);
       rectMode(CORNER);
       rect(0,height*0.8,deadX,height*0.2);
-      pushMatrix();
       translate(deadX,height*0.8);
       fill(230,0,70);
       triangle(0,0,width/50,height/50,0,height/25);
@@ -145,21 +145,21 @@ void draw(){
       
       //funktion for bevægelse af spikes mod højre
       //for(int i = 0; i < 5; i++){
-        deadX += width*1/*i*//pow(map(diff,width*0.13,width*0.87,9,11),5);
+        deadX += width*1/*i*//pow(map(diff,width*0.13,width*0.87,7,14),5);
      // }
       
       //funktion for død af spilleren ved kontakt med spikes
-      if(deadX <= x-width/10){
-        gameState = 2;
-      }
+      //if(deadX <= x-width/10){
+      //  gameState = 2;
+      //}
       
       //viser værdier til debugging
       pushMatrix();
       translate(width-200,100);
       scale(5);
       fill(255,0,0);
-      text(avg,0,0);
-      text(avgVol,0,35);
+      text(avgVol,0,0);
+      text(x,0,35);
       text(deadX,0,70);
       popMatrix();
       break;
