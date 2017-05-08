@@ -56,7 +56,7 @@ void draw(){
   switch(gameState) {
     //spilmenuen:
     case 0:
-      image(menu,0,0,width,width*9/16);
+      image(menu,0,0,width,height);
       //slider til justering af sværhedsgrad
       sliderX = width/2;
       
@@ -66,16 +66,19 @@ void draw(){
       fill(125);
       rect(0,0,width/80,width/40,width/200);
       popMatrix();
-      
+      fill(0);
+      scale(3);
+      text(mouseX,200,200);
+      text(mouseY,300,200);
       //aktiverer, når en knap på musen bliver trykket
       if (mousePressed == true){
         //determinerer, om musen er inden for knappernes y-værdier
-        if (mouseY >=  (width*9/16)*4/5 && mouseY <= (width*9/16)){
+        if (mouseY >=  height*0.57 && mouseY <= height*0.73){
           //determinerer, om musen er inden for x-området af én af knapperne
-          if (mouseX >= 0 && mouseX <= width*2/7){
+          if (mouseX >= width*0.13 && mouseX <= width*0.36){
             gameState = 1;
           }
-          if (mouseX >= width*5/7 && mouseX <= width){
+          if (mouseX >= width*0.64 && mouseX <= width*0.87){
             exit();
           }
         }
@@ -144,8 +147,8 @@ void draw(){
       }
       
       //funktion for død af spilleren ved kontakt med spikes
-      if(deadX+width/50 >= x){
-        gameState = 3;
+      if(deadX+width/30 >= x){
+        gameState = 0;
       }
       
       //viser værdier til debugging
