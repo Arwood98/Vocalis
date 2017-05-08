@@ -28,6 +28,7 @@ PImage playerModel;
 float deadX = 0;
 
 
+
 void setup()
 {
   //size(2000, 700, P2D);
@@ -60,16 +61,16 @@ void draw(){
       //slider til justering af sværhedsgrad
       sliderX = width/2;
       
-      pushMatrix();
-      translate(sliderX,height*0.932);
       rectMode(CENTER);
       fill(125);
-      rect(0,0,width/80,width/40,width/200);
-      popMatrix();
+      rect(sliderX,height*0.932,width/80,width/40,width/200);
+      
       fill(0);
       scale(3);
       text(mouseX,200,200);
       text(mouseY,300,200);
+      text(sliderX,400,200);
+      
       //aktiverer, når en knap på musen bliver trykket
       if (mousePressed == true){
         //determinerer, om musen er inden for knappernes y-værdier
@@ -82,7 +83,9 @@ void draw(){
             exit();
           }
         }
-      //f(mouseX <= sliderX-width/100 && mouseX >= sliderX+width/100 && mouseY) {
+        if(mouseX >= sliderX-(width/100) && mouseX <= sliderX+(width/100) && mouseY >= height*0.91 && mouseY <= height*0.95) {
+          sliderX = mouseX;
+        }
       }
       break;
     //selve spillet:
@@ -125,6 +128,7 @@ void draw(){
       
       //spikes på venstre side af skærmen
       fill(0);
+      rectMode(CORNER);
       rect(0,height*0.8,deadX,height*0.2);
       pushMatrix();
       translate(deadX,height*0.8);
@@ -143,12 +147,12 @@ void draw(){
       
       //funktion for bevægelse af spikes mod højre
       for(int i = 0; i < 5; i++){
-        deadX += width*i/pow(10,5);
+        deadX += width*i/pow(map(diff,width*0.13,width*0.87,9,11),5);
       }
       
       //funktion for død af spilleren ved kontakt med spikes
       if(deadX+width/30 >= x){
-        gameState = 0;
+        gameState = 3;
       }
       
       //viser værdier til debugging
@@ -165,10 +169,12 @@ void draw(){
       //viser en deadscreen, når spilleren dør:
       case 2:
       //et for-loop, der bliver brugt til at time tiden, denne deadscreen skal vises:
-      for(int i = 0; i >= 300; i++){
-          gameState = 0;
+      float deadTime = millis();
+      int deadEnd = 8000;
+      if(deadTime >= deadEnd){
+        gameState = 0;
       }
-      
+          
       break;
   }
  
